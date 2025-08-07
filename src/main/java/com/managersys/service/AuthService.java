@@ -10,7 +10,6 @@ import com.managersys.repository.ConfirmationTokenRepository;
 import com.managersys.repository.EmployeeRepository;
 import com.managersys.security.JwtService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     private final EmployeeRepository employeeRepository;
@@ -30,6 +28,17 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RabbitTemplate rabbitTemplate;
+
+    public AuthService(EmployeeRepository employeeRepository, ConfirmationTokenRepository confirmationTokenRepository,
+                       PasswordEncoder passwordEncoder, JwtService jwtService,
+                       AuthenticationManager authenticationManager, RabbitTemplate rabbitTemplate) {
+        this.employeeRepository = employeeRepository;
+        this.confirmationTokenRepository = confirmationTokenRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     @Transactional
     public String register(RegistrationRequestDTO request) {
